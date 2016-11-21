@@ -1,0 +1,54 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+  <EntityContainerMapping StorageEntityContainer="DataModelStoreContainer" CdmEntityContainer="DataModelContainer">
+    <EntitySetMapping Name="Clients">
+      <EntityTypeMapping TypeName="IsTypeOf(DataModel.Clients)">
+        <MappingFragment StoreEntitySet="Clients">
+          <ScalarProperty Name="ClientId" ColumnName="ClientId" />
+          <ScalarProperty Name="Name" ColumnName="Name" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Products">
+      <EntityTypeMapping TypeName="IsTypeOf(DataModel.Products)">
+        <MappingFragment StoreEntitySet="Products">
+          <ScalarProperty Name="ProductId" ColumnName="ProductId" />
+          <ScalarProperty Name="Name" ColumnName="Name" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Suppliers">
+      <EntityTypeMapping TypeName="IsTypeOf(DataModel.Suppliers)">
+        <MappingFragment StoreEntitySet="Suppliers">
+          <ScalarProperty Name="SupplierId" ColumnName="SupplierId" />
+          <ScalarProperty Name="Name" ColumnName="Name" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="SupplyCatalogues">
+      <EntityTypeMapping TypeName="IsTypeOf(DataModel.SupplyCatalogue)">
+        <MappingFragment StoreEntitySet="SupplyCatalogues">
+          <ScalarProperty Name="ItemId" ColumnName="ItemId" />
+          <ScalarProperty Name="SuppliersSupplierId" ColumnName="SuppliersSupplierId" />
+          <ScalarProperty Name="ProductsProductId" ColumnName="ProductsProductId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Orders">
+      <EntityTypeMapping TypeName="IsTypeOf(DataModel.Orders)">
+        <MappingFragment StoreEntitySet="Orders">
+          <ScalarProperty Name="OrderId" ColumnName="OrderId" />
+          <ScalarProperty Name="ClientsClientId" ColumnName="ClientsClientId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <AssociationSetMapping Name="OrdersSupplyCatalogue" TypeName="DataModel.OrdersSupplyCatalogue" StoreEntitySet="OrdersSupplyCatalogue">
+      <EndProperty Name="Orders">
+        <ScalarProperty Name="OrderId" ColumnName="Orders_OrderId" />
+      </EndProperty>
+      <EndProperty Name="SupplyCatalogue">
+        <ScalarProperty Name="ItemId" ColumnName="Item_ItemId" />
+      </EndProperty>
+    </AssociationSetMapping>
+  </EntityContainerMapping>
+</Mapping>

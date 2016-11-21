@@ -1,0 +1,135 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="DataModel.Store" Alias="Self" Provider="System.Data.SqlClient" ProviderManifestToken="2012" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+  <EntityContainer Name="DataModelStoreContainer">
+    <EntitySet Name="Clients" EntityType="DataModel.Store.Clients" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="Products" EntityType="DataModel.Store.Products" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="Suppliers" EntityType="DataModel.Store.Suppliers" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="SupplyCatalogues" EntityType="DataModel.Store.SupplyCatalogues" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="Orders" EntityType="DataModel.Store.Orders" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="OrdersSupplyCatalogue" EntityType="DataModel.Store.OrdersSupplyCatalogue" store:Type="Tables" Schema="dbo" />
+    <AssociationSet Name="ClientsOrders" Association="DataModel.Store.ClientsOrders">
+      <End Role="Clients" EntitySet="Clients" />
+      <End Role="Orders" EntitySet="Orders" />
+    </AssociationSet>
+    <AssociationSet Name="FK_OrdersSupplyCatalogue_Orders" Association="DataModel.Store.FK_OrdersSupplyCatalogue_Orders">
+      <End Role="Orders" EntitySet="Orders" />
+      <End Role="OrdersSupplyCatalogue" EntitySet="OrdersSupplyCatalogue" />
+    </AssociationSet>
+    <AssociationSet Name="FK_OrdersSupplyCatalogue_SupplyCatalogue" Association="DataModel.Store.FK_OrdersSupplyCatalogue_SupplyCatalogue">
+      <End Role="SupplyCatalogue" EntitySet="SupplyCatalogues" />
+      <End Role="OrdersSupplyCatalogue" EntitySet="OrdersSupplyCatalogue" />
+    </AssociationSet>
+    <AssociationSet Name="SuppliersSupplyCatalogue" Association="DataModel.Store.SuppliersSupplyCatalogue">
+      <End Role="Suppliers" EntitySet="Suppliers" />
+      <End Role="SupplyCatalogue" EntitySet="SupplyCatalogues" />
+    </AssociationSet>
+    <AssociationSet Name="ProductsSupplyCatalogue" Association="DataModel.Store.ProductsSupplyCatalogue">
+      <End Role="Products" EntitySet="Products" />
+      <End Role="SupplyCatalogue" EntitySet="SupplyCatalogues" />
+    </AssociationSet>
+  </EntityContainer>
+  <EntityType Name="Clients">
+    <Key>
+      <PropertyRef Name="ClientId" />
+    </Key>
+    <Property Name="ClientId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Name" Type="nvarchar(max)" Nullable="false" />
+  </EntityType>
+  <EntityType Name="Products">
+    <Key>
+      <PropertyRef Name="ProductId" />
+    </Key>
+    <Property Name="ProductId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Name" Type="nvarchar(max)" Nullable="false" />
+  </EntityType>
+  <EntityType Name="Suppliers">
+    <Key>
+      <PropertyRef Name="SupplierId" />
+    </Key>
+    <Property Name="SupplierId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Name" Type="nvarchar(max)" Nullable="false" />
+  </EntityType>
+  <EntityType Name="SupplyCatalogues">
+    <Key>
+      <PropertyRef Name="ItemId" />
+    </Key>
+    <Property Name="ItemId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="SuppliersSupplierId" Type="int" Nullable="false" />
+    <Property Name="ProductsProductId" Type="int" Nullable="false" />
+  </EntityType>
+  <EntityType Name="Orders">
+    <Key>
+      <PropertyRef Name="OrderId" />
+    </Key>
+    <Property Name="OrderId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="ClientsClientId" Type="int" Nullable="false" />
+  </EntityType>
+  <EntityType Name="OrdersSupplyCatalogue">
+    <Key>
+      <PropertyRef Name="Orders_OrderId" />
+      <PropertyRef Name="Item_ItemId" />
+    </Key>
+    <Property Name="Orders_OrderId" Type="int" Nullable="false" />
+    <Property Name="Item_ItemId" Type="int" Nullable="false" />
+  </EntityType>
+  <Association Name="ClientsOrders">
+    <End Role="Clients" Type="DataModel.Store.Clients" Multiplicity="1" />
+    <End Role="Orders" Type="DataModel.Store.Orders" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Clients">
+        <PropertyRef Name="ClientId" />
+      </Principal>
+      <Dependent Role="Orders">
+        <PropertyRef Name="ClientsClientId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="SuppliersSupplyCatalogue">
+    <End Role="Suppliers" Type="DataModel.Store.Suppliers" Multiplicity="1" />
+    <End Role="SupplyCatalogue" Type="DataModel.Store.SupplyCatalogues" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Suppliers">
+        <PropertyRef Name="SupplierId" />
+      </Principal>
+      <Dependent Role="SupplyCatalogue">
+        <PropertyRef Name="SuppliersSupplierId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="ProductsSupplyCatalogue">
+    <End Role="Products" Type="DataModel.Store.Products" Multiplicity="1" />
+    <End Role="SupplyCatalogue" Type="DataModel.Store.SupplyCatalogues" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Products">
+        <PropertyRef Name="ProductId" />
+      </Principal>
+      <Dependent Role="SupplyCatalogue">
+        <PropertyRef Name="ProductsProductId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_OrdersSupplyCatalogue_Orders">
+    <End Role="Orders" Type="DataModel.Store.Orders" Multiplicity="1" />
+    <End Role="OrdersSupplyCatalogue" Type="DataModel.Store.OrdersSupplyCatalogue" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Orders">
+        <PropertyRef Name="OrderId" />
+      </Principal>
+      <Dependent Role="OrdersSupplyCatalogue">
+        <PropertyRef Name="Orders_OrderId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_OrdersSupplyCatalogue_SupplyCatalogue">
+    <End Role="OrdersSupplyCatalogue" Type="DataModel.Store.OrdersSupplyCatalogue" Multiplicity="*" />
+    <End Role="SupplyCatalogue" Type="DataModel.Store.SupplyCatalogues" Multiplicity="1" />
+    <ReferentialConstraint>
+      <Principal Role="SupplyCatalogue">
+        <PropertyRef Name="ItemId" />
+      </Principal>
+      <Dependent Role="OrdersSupplyCatalogue">
+        <PropertyRef Name="Item_ItemId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+</Schema>

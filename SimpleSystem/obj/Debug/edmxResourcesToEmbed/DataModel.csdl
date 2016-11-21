@@ -1,0 +1,110 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema xmlns="http://schemas.microsoft.com/ado/2009/11/edm" xmlns:cg="http://schemas.microsoft.com/ado/2006/04/codegeneration" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" Namespace="DataModel" Alias="Self" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" annotation:UseStrongSpatialTypes="false">
+  <EntityContainer Name="DataModelContainer" annotation:LazyLoadingEnabled="true">
+    <EntitySet Name="Clients" EntityType="DataModel.Clients" />
+    <EntitySet Name="Products" EntityType="DataModel.Products" />
+    <EntitySet Name="Suppliers" EntityType="DataModel.Suppliers" />
+    <EntitySet Name="SupplyCatalogues" EntityType="DataModel.SupplyCatalogue" />
+    <EntitySet Name="Orders" EntityType="DataModel.Orders" />
+    <AssociationSet Name="ClientsOrders" Association="DataModel.ClientsOrders">
+      <End Role="Clients" EntitySet="Clients" />
+      <End Role="Orders" EntitySet="Orders" />
+    </AssociationSet>
+    <AssociationSet Name="OrdersSupplyCatalogue" Association="DataModel.OrdersSupplyCatalogue">
+      <End Role="Orders" EntitySet="Orders" />
+      <End Role="SupplyCatalogue" EntitySet="SupplyCatalogues" />
+    </AssociationSet>
+    <AssociationSet Name="SuppliersSupplyCatalogue" Association="DataModel.SuppliersSupplyCatalogue">
+      <End Role="Suppliers" EntitySet="Suppliers" />
+      <End Role="SupplyCatalogue" EntitySet="SupplyCatalogues" />
+    </AssociationSet>
+    <AssociationSet Name="ProductsSupplyCatalogue" Association="DataModel.ProductsSupplyCatalogue">
+      <End Role="Products" EntitySet="Products" />
+      <End Role="SupplyCatalogue" EntitySet="SupplyCatalogues" />
+    </AssociationSet>
+  </EntityContainer>
+  <EntityType Name="Clients">
+    <Key>
+      <PropertyRef Name="ClientId" />
+    </Key>
+    <Property Name="ClientId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Name" Type="String" Nullable="false" />
+    <NavigationProperty Name="Orders" Relationship="DataModel.ClientsOrders" FromRole="Clients" ToRole="Orders" />
+  </EntityType>
+  <EntityType Name="Products">
+    <Key>
+      <PropertyRef Name="ProductId" />
+    </Key>
+    <Property Name="ProductId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Name" Type="String" Nullable="false" />
+    <NavigationProperty Name="Items" Relationship="DataModel.ProductsSupplyCatalogue" FromRole="Products" ToRole="SupplyCatalogue" />
+  </EntityType>
+  <EntityType Name="Suppliers">
+    <Key>
+      <PropertyRef Name="SupplierId" />
+    </Key>
+    <Property Name="SupplierId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Name" Type="String" Nullable="false" />
+    <NavigationProperty Name="Items" Relationship="DataModel.SuppliersSupplyCatalogue" FromRole="Suppliers" ToRole="SupplyCatalogue" />
+  </EntityType>
+  <EntityType Name="SupplyCatalogue">
+    <Key>
+      <PropertyRef Name="ItemId" />
+    </Key>
+    <Property Name="ItemId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <NavigationProperty Name="Orders" Relationship="DataModel.OrdersSupplyCatalogue" FromRole="SupplyCatalogue" ToRole="Orders" />
+    <NavigationProperty Name="Supplier" Relationship="DataModel.SuppliersSupplyCatalogue" FromRole="SupplyCatalogue" ToRole="Suppliers" />
+    <Property Name="SuppliersSupplierId" Type="Int32" Nullable="false" />
+    <NavigationProperty Name="Product" Relationship="DataModel.ProductsSupplyCatalogue" FromRole="SupplyCatalogue" ToRole="Products" />
+    <Property Name="ProductsProductId" Type="Int32" Nullable="false" />
+  </EntityType>
+  <EntityType Name="Orders">
+    <Key>
+      <PropertyRef Name="OrderId" />
+    </Key>
+    <Property Name="OrderId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <NavigationProperty Name="Client" Relationship="DataModel.ClientsOrders" FromRole="Orders" ToRole="Clients" />
+    <Property Name="ClientsClientId" Type="Int32" Nullable="false" />
+    <NavigationProperty Name="Item" Relationship="DataModel.OrdersSupplyCatalogue" FromRole="Orders" ToRole="SupplyCatalogue" />
+  </EntityType>
+  <Association Name="ClientsOrders">
+    <End Type="DataModel.Clients" Role="Clients" Multiplicity="1" />
+    <End Type="DataModel.Orders" Role="Orders" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Clients">
+        <PropertyRef Name="ClientId" />
+      </Principal>
+      <Dependent Role="Orders">
+        <PropertyRef Name="ClientsClientId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="OrdersSupplyCatalogue">
+    <End Type="DataModel.Orders" Role="Orders" Multiplicity="*" />
+    <End Type="DataModel.SupplyCatalogue" Role="SupplyCatalogue" Multiplicity="*" />
+  </Association>
+  <Association Name="SuppliersSupplyCatalogue">
+    <End Type="DataModel.Suppliers" Role="Suppliers" Multiplicity="1" />
+    <End Type="DataModel.SupplyCatalogue" Role="SupplyCatalogue" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Suppliers">
+        <PropertyRef Name="SupplierId" />
+      </Principal>
+      <Dependent Role="SupplyCatalogue">
+        <PropertyRef Name="SuppliersSupplierId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="ProductsSupplyCatalogue">
+    <End Type="DataModel.Products" Role="Products" Multiplicity="1" />
+    <End Type="DataModel.SupplyCatalogue" Role="SupplyCatalogue" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Products">
+        <PropertyRef Name="ProductId" />
+      </Principal>
+      <Dependent Role="SupplyCatalogue">
+        <PropertyRef Name="ProductsProductId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+</Schema>
